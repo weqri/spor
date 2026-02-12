@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Za naju | Najina pot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rose-light: #fff5f7;
+            --rose-soft: #ffe4e9;
+            --rose-medium: #ffcdd8;
+            --rose-accent: #ff8fab;
+            --gold-light: #fff9ed;
+            --gold-accent: #daa76f;
+            --text-dark: #2d2d2d;
+            --text-soft: #666;
+            --white: #ffffff;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, var(--rose-light) 0%, var(--gold-light) 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated floating hearts background */
+        .hearts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatHeart 15s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 3s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-container {
+            width: 100%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 
+                0 20px 60px rgba(255, 141, 171, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5);
+            text-align: center;
+            position: relative;
+            margin: 40px 0;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+        }
+
+        .progress-bar-outer {
+            height: 3px;
+            background: var(--rose-soft);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--rose-accent), var(--gold-accent));
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 143, 171, 0.5);
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Steps */
+        .step {
+            display: none;
+            opacity: 0;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--rose-accent), var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: var(--rose-accent);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .img-container {
+            width: 100%;
+            max-height: 380px;
+            margin-bottom: 25px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--rose-soft), var(--gold-light));
+            position: relative;
+        }
+
+        .img-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: contain;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-soft);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        /* Important note box */
+        .important-note {
+            background: linear-gradient(135deg, var(--rose-soft) 0%, var(--gold-light) 100%);
+            border-left: 4px solid var(--rose-accent);
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(255, 141, 171, 0.1);
+        }
+
+        .important-note::before {
+            content: '💕';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .important-note p {
+            margin: 12px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .important-note strong {
+            color: var(--rose-accent);
+            font-weight: 600;
+        }
+
+        /* Form elements */
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 500;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--rose-soft);
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: var(--white);
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        textarea:focus, select:focus {
+            border-color: var(--rose-accent);
+            box-shadow: 0 0 0 4px rgba(255, 141, 171, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23ff8fab' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
+        }
+
+        /* Button */
+        .btn {
+            background: linear-gradient(135deg, var(--rose-accent), var(--gold-accent));
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 25px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(255, 141, 171, 0.3);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 141, 171, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Back button */
+        .back-btn {
+            background: transparent;
+            border: 2px solid var(--rose-soft);
+            color: var(--rose-accent);
+            padding: 12px 25px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            box-shadow: none;
+        }
+
+        .back-btn:hover {
+            background: var(--rose-soft);
+            border-color: var(--rose-accent);
+        }
+
+        /* Decorative elements */
+        .decorative-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--rose-accent), transparent);
+            margin: 20px auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .step-container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .img-container {
+                max-height: 280px;
+            }
+
+            .img-container img {
+                max-height: 280px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .img-container {
+                max-height: 220px;
+            }
+
+            .img-container img {
+                max-height: 220px;
+            }
+
+            .step-container {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="hearts-background" id="heartsBackground"></div>
+
+<div class="main-container">
+    <div class="step-container">
+        <!-- Progress bar -->
+        <div class="progress-container">
+            <div class="progress-bar-outer">
+                <div class="progress-bar-inner" id="progressBarInner"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <form action="https://formspree.io/f/mojnedwk" method="POST" id="mainForm">
+            
+            <!-- SLIDE 1: Uvod -->
+            <div class="step active" data-step="1">
+                <h1>Zate...</h1>
+                <div class="decorative-line"></div>
+                <p>Vzemi si trenutek miru in preberi do konca. Skupaj sva, ker se imava rada, a za trdno zvezo potrebujeva popolno iskrenost.</p>
+                <button type="button" class="btn" onclick="nextStep(1)">Začni ✨</button>
+            </div>
+
+            <!-- SLIDE 2: Najini začetki -->
+            <div class="step" data-step="2">
+                <div class="img-container">
+                    <img src="zacetki.jpg" alt="Najini začetki">
+                </div>
+                <h2>Najini začetki</h2>
+                <p>Spomni se najinih prvih dni. Tiste preproste sreče na gomili. Bla sma zaljubljena a sramežljiva</p>
+                <button type="button" class="btn" onclick="nextStep(2)">Nadaljuj 💫</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(2)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 3: Halloween -->
+            <div class="step" data-step="3">
+                <div class="img-container">
+                    <img src="halloween.jpg" alt="Halloween">
+                </div>
+                <h2>Najin Halloween</h2>
+                <p>Ko sva bila nora in naju ni brigalo za nič drugega. Malo sma se zavklekla v pojstli pa sma hitela z make-upom hihi.</p>
+                <button type="button" class="btn" onclick="nextStep(3)">Greva dalje 🌙</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(3)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 4: Sedanjost -->
+            <div class="step" data-step="4">
+                <div class="img-container">
+                    <img src="sedanjost.jpg" alt="Sedanjost">
+                </div>
+                <h2>Sedanjost</h2>
+                <p>Tudi v težkih časih verjamem v naju. Prosim, bodi zdaj povsem odkrita z mano. Rad te mam srce in sem vesel ko preživljama čas skupaj</p>
+                <button type="button" class="btn" onclick="nextStep(4)">Odgovori mi 💝</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(4)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 5: Kaj pogrešam -->
+            <div class="step" data-step="5">
+                <h2>Kaj pogrešam pri tebi</h2>
+                <div class="important-note">
+                    <p><strong>Iskrenost:</strong> Pogrešam čase, ko sem ti lahko zaupal in vedel, da mi boš povedala resnico, ne glede na vse.</p>
+                    <p><strong>Tvoj trud:</strong> Vem, da imaš potencial, a me skrbi, ker ne vlagaš truda v šolo. Želim si, da dosežeš vse, kar si želiš, ne pa da pristaneš na popravcih.</p>
+                    <p><strong>Iniciativo:</strong> Zadnje čase te občutim oddaljeno. Pogrešam, da bi me poklicala, da bi videl tvoj trud, da me želiš videti, ker imam občutek, da sem vedno jaz tisti ki določa kdaj se vidiva. To mi manjka.</p>
+                    <p><strong>Najino povezanost:</strong> Potrebujem, da si spet ekipa. Da oba vlečeva v isto smer.</p>
+                </div>
+                <p style="margin-top: 20px; font-style: italic;">To ti povem, ker si mi mar. Prosim, razmisli o tem.</p>
+                <button type="button" class="btn" onclick="nextStep(5)">Razumem 🤍</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(5)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 6: Prvo vprašanje -->
+            <div class="step" data-step="6">
+                <h2>Prvo vprašanje</h2>
+                <label>Ali si še vedno želiš biti z mano in vlagati v najin odnos?</label>
+                <select name="zelja_po_zvezi" required>
+                    <option value="">Izberi odgovor...</option>
+                    <option value="Da, z vsem srcem">Da, z vsem srcem</option>
+                    <option value="Nisem prepričana">Nisem prepričana</option>
+                    <option value="Želim si, a me je strah">Želim si, a me je strah</option>
+                </select>
+                <button type="button" class="btn" onclick="nextStep(6)">Naslednje 💕</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(6)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 7: Iskrenost -->
+            <div class="step" data-step="7">
+                <h2>Iskrenost</h2>
+                <label>Kaj te pri meni najbolj moti, pa mi morda nisi upala povedati?</label>
+                <textarea name="kaj_jo_moti" rows="3" placeholder="Brez strahu..."></textarea>
+                
+                <label>Vem, da si mi včasih lagala (npr. o kajenju). Kaj naj jaz spremenim, da boš drugič upala priti do mene z resnico?</label>
+                <textarea name="razlog_za_lazi" rows="3"></textarea>
+                
+                <button type="button" class="btn" onclick="nextStep(7)">Nadaljuj ✨</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(7)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 8: Komunikacija -->
+            <div class="step" data-step="8">
+                <h2>Odkrita komunikacija</h2>
+                <label>Kdaj se počutiš najmanj slišano v najinem odnosu?</label>
+                <textarea name="kdaj_se_ne_pocuti_slisano" rows="3" placeholder="Takrat, ko..."></textarea>
+                
+                <label>Kaj te zadržuje, da ne prideš do mene s svojimi skrbmi?</label>
+                <textarea name="kaj_jo_zadrzi" rows="3" placeholder="Strah, dvom, nekaj drugega..."></textarea>
+                
+                <button type="button" class="btn" onclick="nextStep(8)">Naprej 🌸</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(8)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 9: Zaupanje -->
+            <div class="step" data-step="9">
+                <h2>Kako gradiva zaupanje?</h2>
+                <p>Zaupanje se gradi z malimi koraki vsak dan. Tukaj je tvoj prostor, da mi poveš, kako lahko midva oba sodelujeva pri tem.</p>
+                
+                <label>Kaj lahko midva oba narediva, da si ponovno zgradiva zaupanje?</label>
+                <textarea name="kako_zgraditi_zaupanje" rows="4" placeholder="Konkretni predlogi..."></textarea>
+                
+                <label>Ali razumeš, kako tvoje laži vplivajo name in na najin odnos?</label>
+                <select name="razume_vpliv_lazi" required>
+                    <option value="">Izberi odgovor...</option>
+                    <option value="Da, v celoti razumem">Da, v celoti razumem</option>
+                    <option value="Delno razumem">Delno razumem</option>
+                    <option value="Nisem si bila tega zavedala">Ne, nisem se niti tega zavedala</option>
+                </select>
+                
+                <button type="button" class="btn" onclick="nextStep(9)">Nadaljuj 💫</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(9)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 10: Konkretni koraki -->
+            <div class="step" data-step="10">
+                <h2>Tvoji konkretni koraki</h2>
+                <label>Naštej tri stvari, ki jih morava oba spremeniti:</label>
+                <textarea name="tri_spremembe" rows="4" placeholder="1. Jaz bom...&#10;2. Ti boš...&#10;3. Skupaj bova..."></textarea>
+                
+                <label>Kakšen odnos si želiš za naju čez 6 mesecev?</label>
+                <textarea name="odnos_cez_6_mesecev" rows="3" placeholder="Opiši svojo vizijo..."></textarea>
+                
+                <button type="button" class="btn" onclick="nextStep(10)">Naprej 🌟</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(10)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 11: Obljuba -->
+            <div class="step" data-step="11">
+                <h2>Obljuba za prihodnost</h2>
+                <label>Mi lahko obljubiš, da boš od danes naprej sama prišla do mene, ko narediš napako ali če te kaj muči?</label>
+                <select name="obljuba_iskrenosti" required>
+                    <option value="">Izberi odgovor...</option>
+                    <option value="Da, obljubim">Da, obljubim</option>
+                    <option value="Potrudila se bom">Potrudila se bom</option>
+                    <option value="Ne vem, če zmorem">Ne vem, če zmorem</option>
+                </select>
+
+                <label>Kaj bo tvoja prva konkretna sprememba že DANES ali v naslednjih dneh?</label>
+                <textarea name="konkretna_sprememba" rows="3" placeholder="Konkretno dejanje..."></textarea>
+                
+                <button type="button" class="btn" onclick="nextStep(11)">Zadnja misel 💝</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(11)">← Nazaj</button>
+            </div>
+
+            <!-- SLIDE 12: Zaključek -->
+            <div class="step" data-step="12">
+                <h2>Za konec...</h2>
+                <div class="decorative-line"></div>
+                <p>Daj še zadnjo misel, če mi imaš kaj za povedati čustvenega, kako se počutiš ali karkoli ti leži na duši. Vzemi si čas.</p>
+                <textarea name="zadnja_custvena_misel" rows="5" placeholder="Tvoj prostor..."></textarea>
+                
+                <button type="submit" class="btn">Pošlji mi svoje odgovore 💌</button>
+                <button type="button" class="btn back-btn" onclick="prevStep(12)">← Nazaj</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    const steps = document.querySelectorAll('.step');
+    const totalSteps = steps.length;
+    const progressBarInner = document.getElementById('progressBarInner');
+    const progressText = document.getElementById('progressText');
+    let currentStepIndex = 0;
+
+    // Initialize hearts
+    function createHearts() {
+        const heartsBackground = document.getElementById('heartsBackground');
+        const heartSymbols = ['💕', '💖', '💗', '💓', '💝', '✨', '🌸', '🌟'];
+        
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 15 + 's';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heartsBackground.appendChild(heart);
+        }
+    }
+
+    // Create sparkles around buttons
+    function createSparkles(button) {
+        for (let i = 0; i < 8; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = (Math.random() * 100) + '%';
+            sparkle.style.top = (Math.random() * 100) + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            button.style.position = 'relative';
+            button.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 3000);
+        }
+    }
+
+    // Update progress bar
+    function updateProgress() {
+        const progress = ((currentStepIndex) / (totalSteps - 1)) * 100;
+        progressBarInner.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+    }
+
+    function nextStep(current) {
+        const currentStepEl = steps[current - 1];
+        const inputs = currentStepEl.querySelectorAll('select[required], textarea[required]');
+        let valid = true;
+        
+        inputs.forEach(input => {
+            if (input.hasAttribute('required') && !input.value) {
+                input.style.borderColor = 'var(--rose-accent)';
+                input.style.animation = 'shake 0.5s';
+                valid = false;
+                
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        });
+
+        if (!valid) {
+            alert('Prosim, odgovori na vsa obvezna vprašanja. 💕');
+            return;
+        }
+
+        if (valid && current < totalSteps) {
+            steps[current - 1].classList.remove('active');
+            steps[current].classList.add('active');
+            currentStepIndex = current;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Add sparkles to button
+            const button = currentStepEl.querySelector('.btn');
+            if (button) createSparkles(button);
+        }
+    }
+
+    function prevStep(current) {
+        if (current > 1) {
+            steps[current - 1].classList.remove('active');
+            steps[current - 2].classList.add('active');
+            currentStepIndex = current - 2;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize
+    createHearts();
+    updateProgress();
+
+    // Form submission
+    document.getElementById('mainForm').addEventListener('submit', function(e) {
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Pošiljam... 💫';
+        submitBtn.disabled = true;
+    });
+</script>
+
+</body>
+</html>
